@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fantasy"
+        android:iconTint="#ffffff"
+        android:title="Fantasy" />
+    <item android:title="Horror"
+        android:id="@+id/horror"/>
+    <item android:title="Science Fiction"
+        android:id="@+id/science"/>
+    <item android:title="Romance"
+        android:id="@+id/romance"/>
+    <item android:title="Action"
+        android:id="@+id/action"/>
+</menu>
