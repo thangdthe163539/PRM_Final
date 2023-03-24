@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DatabaseFilm extends SQLiteOpenHelper {
     private static final int VERSION = 1;
@@ -78,6 +79,192 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         return result;
     }
 
+
+
+
+//    pass null for the parameters don't want to use
+//     find films by category: (null, "Action", null)
+//    find films by name:
+//    find films by year:
+//    no parameters are passed or all parameters are null, the method will return all films
+
+    public ArrayList<Film> findFilms(String filmName, ArrayList<String> categories, String year) {
+        ArrayList<Film> list = new ArrayList<Film>();
+        SQLiteDatabase db = getReadableDatabase();
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + TABLE_FILM_NAME + " WHERE 1 = 1");
+
+        if (filmName != null && !filmName.isEmpty()) {
+            queryBuilder.append(" AND " + COLUMN_FILM_NAME + " LIKE ?");
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            for (String category : categories) {
+                queryBuilder.append(" AND " + COLUMN_FILM_CATEGORY + " LIKE ?");
+            }
+        }
+
+        if (year != null && !year.isEmpty()) {
+            queryBuilder.append(" AND substr(" + COLUMN_FILM_DATE + ", -5) LIKE ?");
+        }
+
+        String[] selectionArgs = new String[0];
+        if (filmName != null && !filmName.isEmpty()) {
+            selectionArgs = addStringToArray(selectionArgs, "%" + filmName + "%");
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            for (String category : categories) {
+                selectionArgs = addStringToArray(selectionArgs, "%" + category + "%");
+            }
+        }
+
+        if (year != null && !year.isEmpty()) {
+            selectionArgs = addStringToArray(selectionArgs, "%" + year + "%");
+        }
+
+        Cursor cursor = db.rawQuery(queryBuilder.toString(), selectionArgs);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Film film = new Film();
+                film.setId(cursor.getInt(0));
+                film.setName(cursor.getString(1));
+                film.setCategory(cursor.getString(2));
+                film.setImage(cursor.getString(3));
+                film.setVideo(cursor.getString(4));
+                film.setContent(cursor.getString(5));
+                film.setScore(cursor.getString(6));
+                film.setDate(cursor.getString(7));
+                film.setViews(cursor.getInt(8));
+                list.add(film);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+
+
+//    public ArrayList<Film> findFilms(String filmName, ArrayList<String> categories, String year) {
+//        ArrayList<Film> list = new ArrayList<Film>();
+//        SQLiteDatabase db = getReadableDatabase();
+//        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM " + TABLE_FILM_NAME + " WHERE 1 = 1");
+//
+//        if (filmName != null && !filmName.isEmpty()) {
+//            queryBuilder.append(" AND " + COLUMN_FILM_NAME + " LIKE ?");
+//        }
+//
+//        if (categories != null && !categories.isEmpty()) {
+//            queryBuilder.append(" AND " + COLUMN_FILM_CATEGORY + " IN (");
+//            StringBuilder placeholders = new StringBuilder();
+//            for (int i = 0; i < categories.size(); i++) {
+//                placeholders.append("?");
+//                if (i < categories.size() - 1) {
+//                    placeholders.append(",");
+//                }
+//            }
+//            queryBuilder.append(placeholders.toString() + ")");
+//        }
+//
+//        if (year != null && !year.isEmpty()) {
+//            queryBuilder.append(" AND  substr(" + COLUMN_FILM_DATE + ", -5) = ?");
+//        }
+//
+//        String[] selectionArgs = new String[0];
+//        if (filmName != null && !filmName.isEmpty()) {
+//            selectionArgs = addStringToArray(selectionArgs, "%" + filmName + "%");
+//        }
+//
+//        if (categories != null && !categories.isEmpty()) {
+//            selectionArgs = addStringToArray(selectionArgs, categories.toArray(new String[0]));
+//        }
+//
+//        if (year != null && !year.isEmpty()) {
+//            selectionArgs = addStringToArray(selectionArgs,"%" + year+ "%");
+//        }
+//
+//        Cursor cursor = db.rawQuery(queryBuilder.toString(), selectionArgs);
+//        if (cursor.moveToFirst()) {
+//            while (!cursor.isAfterLast()) {
+//                Film film = new Film();
+//                film.setId(cursor.getInt(0));
+//                film.setName(cursor.getString(1));
+//                film.setCategory(cursor.getString(2));
+//                film.setImage(cursor.getString(3));
+//                film.setVideo(cursor.getString(4));
+//                film.setContent(cursor.getString(5));
+//                film.setScore(cursor.getString(6));
+//                film.setDate(cursor.getString(7));
+//                film.setViews(cursor.getInt(8));
+//                list.add(film);
+//                cursor.moveToNext();
+//            }
+//        }
+//        cursor.close();
+//        db.close();
+//        return list;
+//    }
+
+
+
+
+    public ArrayList<Film> findFilms(String filmName, String category, String year) {
+        ArrayList<Film> list = new ArrayList<Film>();
+        String selection = "";
+        ArrayList<String> selectionArgsList = new ArrayList<String>();
+
+        if (filmName != null) {
+            selection += COLUMN_FILM_NAME + " LIKE ? ";
+            selectionArgsList.add("%" + filmName + "%");
+        }
+
+        if (category != null) {
+            if (!selection.isEmpty()) {
+                selection += " AND ";
+            }
+            selection += COLUMN_FILM_CATEGORY + " = ? ";
+            selectionArgsList.add(category);
+        }
+
+        if (year != null) {
+            if (!selection.isEmpty()) {
+                selection += " AND ";
+            }
+            selection += "strftime('%Y', " + COLUMN_FILM_DATE + ") = ?";
+            selectionArgsList.add(year);
+        }
+
+        String[] selectionArgs = selectionArgsList.toArray(new String[selectionArgsList.size()]);
+        String query = "SELECT * FROM " + TABLE_FILM_NAME;
+        if (!selection.isEmpty()) {
+            query += " WHERE " + selection;
+        }
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Film film = new Film();
+                film.setId(cursor.getInt(0));
+                film.setName(cursor.getString(1));
+                film.setCategory(cursor.getString(2));
+                film.setImage(cursor.getString(3));
+                film.setVideo(cursor.getString(4));
+                film.setContent(cursor.getString(5));
+                film.setScore(cursor.getString(6));
+                film.setDate(cursor.getString(7));
+                film.setViews(cursor.getInt(8));
+                list.add(film);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        db.close();
+        return list;
+    }
+
     public ArrayList<Film> getAllListFilm() {
         ArrayList<Film> list = new ArrayList<Film>();
         String query = "SELECT * FROM " + TABLE_FILM_NAME;
@@ -104,6 +291,8 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         db.close();
         return null;
     }
+
+
     public ArrayList<Film> getListTreding() {
         ArrayList<Film> list = new ArrayList<Film>();
         String query = "select * from "   + TABLE_FILM_NAME + " order by views desc limit 5 ";
@@ -132,8 +321,8 @@ public class DatabaseFilm extends SQLiteOpenHelper {
     }
     public ArrayList<Film> findFilmByName(String filmName) {
         ArrayList<Film> list = new ArrayList<Film>();
-        String query = "SELECT * FROM " + TABLE_FILM_NAME + " WHERE " + COLUMN_FILM_NAME + " Like ?";
-        String[] selectionArgs = {filmName};
+        String query = "SELECT * FROM " + TABLE_FILM_NAME + " WHERE " + COLUMN_FILM_NAME + " LIKE ?";
+        String[] selectionArgs = {"%"+filmName +"%"};
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, selectionArgs);
         if (cursor.moveToFirst()) {
@@ -157,6 +346,8 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         db.close();
         return null;
     }
+
+
     public ArrayList<Film> findFilmByCategory(String category) {
         ArrayList<Film> list = new ArrayList<Film>();
         String query = "SELECT * FROM " + TABLE_FILM_NAME + " WHERE " + COLUMN_FILM_CATEGORY + " =? ";
@@ -184,6 +375,71 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         db.close();
         return null;
     }
+
+    public ArrayList<Film> findFilmByCategories(ArrayList<String> categories) {
+        ArrayList<Film> list = new ArrayList<Film>();
+        String query = "SELECT * FROM " + TABLE_FILM_NAME + " WHERE " + COLUMN_FILM_CATEGORY + " IN (";
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < categories.size(); i++) {
+            placeholders.append("?");
+            if (i < categories.size() - 1) {
+                placeholders.append(",");
+            }
+        }
+        query += placeholders.toString() + ")";
+        String[] selectionArgs = categories.toArray(new String[0]);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Film film = new Film();
+                film.setId(cursor.getInt(0));
+                film.setName(cursor.getString(1));
+                film.setCategory(cursor.getString(2));
+                film.setImage(cursor.getString(3));
+                film.setVideo(cursor.getString(4));
+                film.setContent(cursor.getString(5));
+                film.setScore(cursor.getString(6));
+                film.setDate(cursor.getString(7));
+                film.setViews(cursor.getInt(8));
+                list.add(film);
+                cursor.moveToNext();
+            }
+            return list;
+        }
+        cursor.close();
+        db.close();
+        return null;
+    }
+
+    public ArrayList<Film> findFilmByYear(String year) {
+        ArrayList<Film> list = new ArrayList<Film>();
+        String query = "SELECT * FROM " + TABLE_FILM_NAME + " WHERE SUBSTR(" + COLUMN_FILM_DATE + ", -4) = ?";
+        String[] selectionArgs = {year};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Film film = new Film();
+                film.setId(cursor.getInt(0));
+                film.setName(cursor.getString(1));
+                film.setCategory(cursor.getString(2));
+                film.setImage(cursor.getString(3));
+                film.setVideo(cursor.getString(4));
+                film.setContent(cursor.getString(5));
+                film.setScore(cursor.getString(6));
+                film.setDate(cursor.getString(7));
+                film.setViews(cursor.getInt(8));
+                list.add(film);
+                cursor.moveToNext();
+            }
+            return list;
+        }
+        cursor.close();
+        db.close();
+        return null;
+    }
+
     public int deleteFilm(String name) {
         SQLiteDatabase db = getWritableDatabase();
         int result = db.delete(TABLE_FILM_NAME, COLUMN_FILM_NAME + "=?", new String[]{name});
@@ -246,6 +502,18 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         db.close();
         return null;
     }
+
+//    public String formatDate2(String dateString) {
+//        try {
+//            return new String(new SimpleDateFormat("yyyyMMdd")
+//                    .format(new SimpleDateFormat("MMMM d, yyyy").parse(dateString)));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
+
     public User checkEmailExist(String email) {
         String query = " SELECT * FROM " + TABLE_USER_NAME + " WHERE " + COLUMN_USER_EMAIL + " =? " ;
         SQLiteDatabase db = getReadableDatabase();
@@ -263,4 +531,34 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         db.close();
         return null;
     }
+
+    private String[] addStringToArray(String[] array, String str) {
+        String[] newArray = Arrays.copyOf(array, array.length + 1);
+        newArray[newArray.length - 1] = str;
+        return newArray;
+    }
+
+    private String[] addStringToArray(String[] array, String[] strings) {
+        String[] newArray = Arrays.copyOf(array, array.length + strings.length);
+        System.arraycopy(strings, 0, newArray, array.length, strings.length);
+        return newArray;
+    }
+
+//    private String formatDate(String dateString) {
+//        try {
+//            Log.d("date1", dateString);
+//            SimpleDateFormat inputFormat = new SimpleDateFormat("MMMM d, yyyy");
+//
+//            Date date = inputFormat.parse(dateString.trim());
+//            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+//
+//            String formattedDate = outputFormat.format(date);
+//            Log.d("date", formattedDate);
+//
+//            return formattedDate;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 }
