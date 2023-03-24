@@ -1,5 +1,9 @@
 package com.example.prm_final;
 
+import static com.example.prm_final.R.id.home;
+import static com.example.prm_final.R.id.person;
+import static com.example.prm_final.R.id.search;
+
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // create new nav-bottom
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new HomeFragment());
@@ -23,13 +26,13 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
-                case R.id.home:
+                case home:
                     replaceFragment(new HomeFragment());
                     break;
-                case  R.id.search:
+                case  search:
                     replaceFragment(new SearchFragment());
                     break;
-                case R.id.person:
+                case person:
                     PersonFragment personFragment = new PersonFragment();
                     replaceFragment(personFragment);
                     Bundle bundle = getIntent().getExtras();

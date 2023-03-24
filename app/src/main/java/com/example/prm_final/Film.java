@@ -99,4 +99,19 @@ public class Film implements Serializable {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", image='" + image + '\'' +
+                ", video='" + video + '\'' +
+                ", content='" + content + '\'' +
+                ", score='" + score + '\'' +
+                ", views=" + views +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

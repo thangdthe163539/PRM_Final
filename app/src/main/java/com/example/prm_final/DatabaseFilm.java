@@ -18,17 +18,17 @@ public class DatabaseFilm extends SQLiteOpenHelper {
     private final String COLUMN_FILM_ID = "id";
     private final String COLUMN_FILM_NAME = "name";
     private final String COLUMN_FILM_CATEGORY = "category";
-    private final String COLUMN_FILM_IMAGE = "image";
-    private final String COLUMN_FILM_VIDEO = "video";
-    private final String COLUMN_FILM_CONTENT = "content";
-    private final String COLUMN_FILM_SCORE = "score";
+    private final String COLUMN_IMAGE = "image";
+    private final String COLUMN_VIDEO = "video";
+    private final String COLUMN_CONTENT = "content";
+    private final String COLUMN_SCORE = "score";
     private final String COLUMN_FILM_DATE = "date";
-    private final String COLUMN_FILM_VIEWS = "views";
-    private final String TABLE_USER_NAME = "user";
-    private final String COLUMN_USER_ID = "id";
-    private final String COLUMN_USER_USERNAME = "username";
-    private final String COLUMN_USER_EMAIL = "email";
-    private final String COLUMN_USER_PASSWORD = "password";
+    private final String COLUMN_VIEWS = "views";
+    private final String TABLE_USER = "user";
+    private final String COLUMN_UID = "id";
+    private final String COLUMN_USERNAME = "username";
+    private final String COLUMN_EMAIL = "email";
+    private final String COLUMN_PASSWORD = "password";
 
     public DatabaseFilm(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, VERSION);
@@ -40,17 +40,17 @@ public class DatabaseFilm extends SQLiteOpenHelper {
                 + COLUMN_FILM_ID + " INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL, "
                 + COLUMN_FILM_NAME + " TEXT, "
                 + COLUMN_FILM_CATEGORY + " TEXT, "
-                + COLUMN_FILM_IMAGE + " TEXT, "
-                + COLUMN_FILM_VIDEO + " TEXT, "
-                + COLUMN_FILM_CONTENT + " TEXT, "
-                + COLUMN_FILM_SCORE + " TEXT, "
+                + COLUMN_IMAGE + " TEXT, "
+                + COLUMN_VIDEO + " TEXT, "
+                + COLUMN_CONTENT + " TEXT, "
+                + COLUMN_SCORE + " TEXT, "
                 + COLUMN_FILM_DATE + " TEXT, "
-                + COLUMN_FILM_VIEWS + " INTEGER) ";
-        String createUser = " CREATE TABLE " + TABLE_USER_NAME + " ( "
-                + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-                + COLUMN_USER_USERNAME + " TEXT, "
-                + COLUMN_USER_EMAIL + " TEXT, "
-                + COLUMN_USER_PASSWORD + " TEXT) ";
+                + COLUMN_VIEWS + " INTEGER) ";
+        String createUser = " CREATE TABLE " + TABLE_USER + " ( "
+                + COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+                + COLUMN_USERNAME + " TEXT, "
+                + COLUMN_EMAIL + " TEXT, "
+                + COLUMN_PASSWORD + " TEXT) ";
         db.execSQL(createUser);
         db.execSQL(createFilm);
     }
@@ -58,23 +58,23 @@ public class DatabaseFilm extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(" DROP TABLE IF EXISTS " + TABLE_FILM_NAME);
-        db.execSQL(" DROP TABLE IF EXISTS " + TABLE_USER_NAME);
+        db.execSQL(" DROP TABLE IF EXISTS " + TABLE_USER);
         onCreate(db);
     }
 
     public long insertData(int id, String name, String category, String content, String score, String date, int views, String image, String video) {
         ContentValues values = new ContentValues(); //lưu trữ dữ liệu vào db
 
-        values.put(COLUMN_FILM_IMAGE, image);
-        values.put(COLUMN_FILM_VIDEO, video);
+        values.put(COLUMN_IMAGE, image);
+        values.put(COLUMN_VIDEO, video);
 
 //        values.put(COLUMN_FILM_ID, id);
         values.put(COLUMN_FILM_NAME, name.trim());
         values.put(COLUMN_FILM_CATEGORY, category.trim());
-        values.put(COLUMN_FILM_CONTENT, content.trim());
-        values.put(COLUMN_FILM_SCORE, score.trim());
+        values.put(COLUMN_CONTENT, content.trim());
+        values.put(COLUMN_SCORE, score.trim());
         values.put(COLUMN_FILM_DATE, date.trim());
-        values.put(COLUMN_FILM_VIEWS, views);
+        values.put(COLUMN_VIEWS, views);
         SQLiteDatabase db1 = getWritableDatabase();
         long result = db1.insert(TABLE_FILM_NAME, null, values);
         return result;
@@ -449,7 +449,7 @@ public class DatabaseFilm extends SQLiteOpenHelper {
     }
     public long updateView (String filmId, int views) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_FILM_VIEWS, views);
+        values.put(COLUMN_VIEWS, views);
         SQLiteDatabase db1 = getWritableDatabase();
         long result = db1.update(TABLE_FILM_NAME, values,COLUMN_FILM_ID + "=?", new String[]{filmId});
         return result;
@@ -478,16 +478,16 @@ public class DatabaseFilm extends SQLiteOpenHelper {
 
     public long signUp(String name, String email, String password) {
         ContentValues values = new ContentValues(); //lưu trữ dữ liệu vào db
-        values.put(COLUMN_USER_USERNAME, name);
-        values.put(COLUMN_USER_EMAIL, email);
-        values.put(COLUMN_USER_PASSWORD, password);
+        values.put(COLUMN_USERNAME, name);
+        values.put(COLUMN_EMAIL, email);
+        values.put(COLUMN_PASSWORD, password);
         SQLiteDatabase db1 = getWritableDatabase();
-        long result = db1.insert(TABLE_USER_NAME, null, values);
+        long result = db1.insert(TABLE_USER, null, values);
         return result;
     }
 
     public User signIn(String email, String password) {
-        String query = " SELECT * FROM " + TABLE_USER_NAME + " WHERE " + COLUMN_USER_EMAIL + " =? AND " + COLUMN_USER_PASSWORD + " =? ";
+        String query = " SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_EMAIL + " =? AND " + COLUMN_PASSWORD + " =? ";
         SQLiteDatabase db = getReadableDatabase();
         String[] selectionArgs = {email, password};
         Cursor cursor = db.rawQuery(query, selectionArgs);
@@ -516,7 +516,7 @@ public class DatabaseFilm extends SQLiteOpenHelper {
 
 
     public User checkEmailExist(String email) {
-        String query = " SELECT * FROM " + TABLE_USER_NAME + " WHERE " + COLUMN_USER_EMAIL + " =? " ;
+        String query = " SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_EMAIL + " =? " ;
         SQLiteDatabase db = getReadableDatabase();
         String[] selectionArgs = {email};
         Cursor cursor = db.rawQuery(query, selectionArgs);

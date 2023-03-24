@@ -45,12 +45,7 @@ public class recyclerAdapterTrending extends RecyclerView.Adapter<recyclerAdapte
         holder.filmName.setText(film.getName());
         holder.filmImage.setImageResource(Integer.parseInt(film.getImage()));
         holder.score.setText(film.getScore());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickGetFilmDetail(film);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> onClickGetFilmDetail(film));
     }
     private void onClickGetFilmDetail(Film film) {
         DatabaseFilm handler = new DatabaseFilm(context, null, null, 1);

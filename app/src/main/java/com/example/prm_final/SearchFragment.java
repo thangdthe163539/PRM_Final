@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -232,7 +233,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void renderFilmList(String type) {
-        if (type == "tabs") {
+        if (Objects.equals(type, "tabs")) {
             if (films == null) {
                 recyclerView.setVisibility(View.GONE);
                 noResult.setVisibility(View.VISIBLE);

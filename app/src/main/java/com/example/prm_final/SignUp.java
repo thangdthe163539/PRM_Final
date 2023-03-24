@@ -13,67 +13,65 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
-    TextView signIn, notification;
-    EditText username, email, password;
+    TextView tvSignIn, tvNotification;
+    EditText etUsername, etEmail, etPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        signIn = findViewById(R.id.signUp);
-        signIn.setPaintFlags(signIn.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvSignIn = findViewById(R.id.signUp);
+        tvSignIn.setPaintFlags(tvSignIn.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        notification = findViewById(R.id.notification);
-        notification.setVisibility(View.GONE);
+        tvNotification = findViewById(R.id.notification);
+        tvNotification.setVisibility(View.GONE);
 
-        username = findViewById(R.id.username);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-
+        etUsername = findViewById(R.id.username);
+        etEmail = findViewById(R.id.email);
+        etPassword = findViewById(R.id.password);
     }
+
     public void signUp(View view) {
-        String Username = username.getText().toString().trim();
-        String Password = password.getText().toString().trim();
-        String Email = email.getText().toString().trim();
-        if ((Username.isEmpty() || Username == null) && (Email.isEmpty() || Email == null) && (Password.isEmpty() || Password == null)) {
-            setNotification("Username, Email and Password is required");
-        }
-        else if (Username.isEmpty() || Username == null) {
-            setNotification("Username is empty");
-        }
-        else if (Email.isEmpty() || Email == null) {
-            setNotification("Email is empty");
-        }
-        else if (Password.isEmpty() || Password == null) {
-            setNotification("Password is empty");
-        }
-        else {
-            DatabaseFilm dba = new DatabaseFilm(view.getContext(), null, null, 1);
-            User CheckEmailExist = dba.checkEmailExist(Email);
-            if (CheckEmailExist == null && Password.length() > 5 && validate(Email)) {
-                long result = dba.signUp(Username, Email, Password);
+        String username = etUsername.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String errMsg = "";
+
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            errMsg = "Username, Email and Password are required";
+        } else if (username.isEmpty()) {
+            errMsg = "Username is empty";
+        } else if (email.isEmpty()) {
+            errMsg = "Email is empty";
+        } else if (password.isEmpty()) {
+            errMsg = "Password is empty";
+        } else {
+            DatabaseFilm db = new DatabaseFilm(view.getContext(), null, null, 1);
+            User checkEmailExist = db.checkEmailExist(email);
+
+            if (checkEmailExist == null && password.length() > 5 && validate(email)) {
+                long result = db.signUp(username, email, password);
+
                 if (result == 0) {
-                    setNotification("Sign Up fail check later");
+                    errMsg = "Sign Up failed, please try again later";
                 } else {
                     Intent intent = new Intent(view.getContext(), Login.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("signUpSuccess", "Sign Up Success !");
-                    intent.putExtras(bundle);
+                    intent.putExtra("signUpSuccess", "Sign Up Success !");
                     startActivity(intent);
+                    return;
                 }
-            } else {
-                if (!validate(Email)) {
-                    setNotification("This email was wrong format");
-                }
-                else if (Password.length() < 6) {
-                    setNotification("Password have length higher than 5");
-                }
-                else if (CheckEmailExist != null) {
-                    setNotification("This email has been used");
-                }
+            } else if (!validate(email)) {
+                errMsg = "Invalid email format";
+            } else if (password.length() < 6) {
+                errMsg = "Password must be at least 6 characters long";
+            } else if (checkEmailExist != null) {
+                errMsg = "Email already exists";
             }
         }
+        setNotification(errMsg);
     }
+
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -81,10 +79,12 @@ public class SignUp extends AppCompatActivity {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
-    public void setNotification(String noti) {
-        notification.setVisibility(View.VISIBLE);
-        notification.setText(noti);
+
+    public void setNotification(String errMsg) {
+        tvNotification.setVisibility(View.VISIBLE);
+        tvNotification.setText(errMsg);
     }
+
     public void signIn(View view) {
         Intent intent = new Intent(view.getContext(), Login.class);
         startActivity(intent);
