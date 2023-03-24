@@ -37,105 +37,10 @@
         android:layout_marginTop="12dp"
         android:layout_marginBottom="10dp"
         android:text="Soul (2020)"
-        android:textColor="@color/white"
+        android:textColor="@color/heavyBlue"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/cardView1"
         app:layout_constraintTop_toBottomOf="@+id/cardView1" />
-
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/cardView2"-->
-    <!--        android:layout_width="160dp"-->
-    <!--        android:layout_height="160dp"-->
-    <!--        app:cardCornerRadius="20dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/cardView1"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.542"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/cardView1"-->
-    <!--        app:layout_constraintTop_toTopOf="@+id/cardView1"-->
-    <!--        app:layout_constraintVertical_bias="0.0">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/imageView9"-->
-    <!--            android:layout_width="160dp"-->
-    <!--            android:layout_height="196dp"-->
-    <!--            android:scaleType="centerCrop"-->
-    <!--            android:src="@drawable/movie11"-->
-    <!--            app:cardCornerRadius="20dp" />-->
-
-    <!--    </androidx.cardview.widget.CardView>-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView3"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        android:text="Knive Outs (2019)"-->
-    <!--        android:textSize="16sp"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/cardView1"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/cardView2" />-->
-
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/cardView3"-->
-    <!--        android:layout_width="160dp"-->
-    <!--        android:layout_height="160dp"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        app:cardCornerRadius="20dp"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/textViewSearch"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textViewSearch">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/imageView10"-->
-    <!--            android:layout_width="160dp"-->
-    <!--            android:layout_height="196dp"-->
-    <!--            android:scaleType="centerCrop"-->
-    <!--            android:src="@drawable/movie12"-->
-    <!--            app:cardCornerRadius="20dp" />-->
-
-    <!--    </androidx.cardview.widget.CardView>-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView4"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        android:text="Knive Outs (2019)"-->
-    <!--        android:textSize="16sp"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/cardView3"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/cardView3" />-->
-
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/cardView4"-->
-    <!--        android:layout_width="160dp"-->
-    <!--        android:layout_height="196dp"-->
-    <!--        android:layout_marginStart="32dp"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        app:cardCornerRadius="20dp"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/cardView3"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView3">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/imageView11"-->
-    <!--            android:layout_width="160dp"-->
-    <!--            android:layout_height="196dp"-->
-    <!--            android:scaleType="centerCrop"-->
-    <!--            android:src="@drawable/movie13"-->
-    <!--            app:cardCornerRadius="20dp" />-->
-
-    <!--    </androidx.cardview.widget.CardView>-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView1"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="12dp"-->
-    <!--        android:text="Knive Outs (2019)"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        android:textSize="16sp"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/cardView4"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/cardView4" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
