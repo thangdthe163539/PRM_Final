@@ -69,11 +69,11 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         values.put(COLUMN_FILM_VIDEO, video);
 
 //        values.put(COLUMN_FILM_ID, id);
-        values.put(COLUMN_FILM_NAME, name);
-        values.put(COLUMN_FILM_CATEGORY, category);
-        values.put(COLUMN_FILM_CONTENT, content);
-        values.put(COLUMN_FILM_SCORE, score);
-        values.put(COLUMN_FILM_DATE, date);
+        values.put(COLUMN_FILM_NAME, name.trim());
+        values.put(COLUMN_FILM_CATEGORY, category.trim());
+        values.put(COLUMN_FILM_CONTENT, content.trim());
+        values.put(COLUMN_FILM_SCORE, score.trim());
+        values.put(COLUMN_FILM_DATE, date.trim());
         values.put(COLUMN_FILM_VIEWS, views);
         SQLiteDatabase db1 = getWritableDatabase();
         long result = db1.insert(TABLE_FILM_NAME, null, values);
