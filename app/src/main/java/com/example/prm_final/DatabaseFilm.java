@@ -37,7 +37,7 @@ public class DatabaseFilm extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createFilm = " CREATE TABLE " + TABLE_FILM_NAME + " ( "
-                + COLUMN_FILM_ID + " INTEGER PRIMARY KEY, "
+                + COLUMN_FILM_ID + " INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL, "
                 + COLUMN_FILM_NAME + " TEXT, "
                 + COLUMN_FILM_CATEGORY + " TEXT, "
                 + COLUMN_FILM_IMAGE + " TEXT, "
@@ -61,13 +61,14 @@ public class DatabaseFilm extends SQLiteOpenHelper {
         db.execSQL(" DROP TABLE IF EXISTS " + TABLE_USER_NAME);
         onCreate(db);
     }
+
     public long insertData(int id, String name, String category, String content, String score, String date, int views, String image, String video) {
         ContentValues values = new ContentValues(); //lưu trữ dữ liệu vào db
 
         values.put(COLUMN_FILM_IMAGE, image);
         values.put(COLUMN_FILM_VIDEO, video);
 
-        values.put(COLUMN_FILM_ID, id);
+//        values.put(COLUMN_FILM_ID, id);
         values.put(COLUMN_FILM_NAME, name);
         values.put(COLUMN_FILM_CATEGORY, category);
         values.put(COLUMN_FILM_CONTENT, content);
